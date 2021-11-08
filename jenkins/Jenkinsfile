@@ -1,34 +1,24 @@
 pipeline {
     agent any 
     stages {
-        stage('Static Analysis') {
+        stage('Build') {
             steps {
-                echo 'Run the static analysis to the code' 
+                sh 'mvn -B -DskipTests clean package'
             }
         }
-        stage('Compile') {
+        stage('Test') {
             steps {
-                echo 'Compile the source code' 
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
-        stage('Security Check') {
+        stage('Deliver') {
             steps {
-                echo 'Run the security check against the application' 
-            }
-        }
-        stage('Run Unit Tests') {
-            steps {
-                echo 'Run unit tests from the source code' 
-            }
-        }
-        stage('Run Integration Tests') {
-            steps {
-                echo 'Run only crucial integration tests from the source code test' 
-            }
-        }
-        stage('Run Integration Tests 2') {
-            steps {
-                echo 'Run only crucial integration tests from the source code test' 
+                sh './jenkins/scripts/deliver.sh'
             }
         }
     }
