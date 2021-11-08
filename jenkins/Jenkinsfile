@@ -26,5 +26,10 @@ pipeline {
                 echo 'Run only crucial integration tests from the source code test' 
             }
         }
+        stage('Run Integration Tests 2') {
+            steps {
+                echo 'Run only crucial integration tests from the source code test' 
+            }
+        }
     }
 }
